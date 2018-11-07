@@ -1,19 +1,17 @@
 <template>
   <div id="app">
-    <Title text="Exploring the DBX api"/>
-    <Gallery />
+    <Dropbox />
   </div>
 </template>
 
 <script>
-import Title from './components/Title.vue'
-import Gallery from './components/Gallery.vue'
+import Title from './components/Title.vue';
+import Dropbox from './components/Dropbox.vue';
 
 export default {
   name: 'app',
   components: {
-    Title,
-    Gallery
+    Dropbox
   }
 }
 </script>
@@ -21,12 +19,6 @@ export default {
 <style>
 * {
   box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
 }
 
 #app {
