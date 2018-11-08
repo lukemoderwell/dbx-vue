@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <Dropbox />
+    <DBX />
   </div>
 </template>
 
 <script>
-import Title from './components/Title.vue';
-import Dropbox from './components/Dropbox.vue';
+import DBX from './components/DBX.vue';
 
 export default {
   name: 'app',
   components: {
-    Dropbox
+    DBX
   }
 }
 </script>
