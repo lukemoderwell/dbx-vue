@@ -1,7 +1,7 @@
 <template>
   <div>
     <svg class="maestro-nav__logo" aria-label="Home" xmlns="http://www.w3.org/2000/svg" role="img" width="32px" height="32px" viewBox="0 0 32 32" style="fill:#0062ff;" data-reactid="12"><title data-reactid="13"></title><path d="M8 2.4l8 5.1-8 5.1-8-5.1 8-5.1zm16 0l8 5.1-8 5.1-8-5.1 8-5.1zM0 17.7l8-5.1 8 5.1-8 5.1-8-5.1zm24-5.1l8 5.1-8 5.1-8-5.1 8-5.1zM8 24.5l8-5.1 8 5.1-8 5.1-8-5.1z" data-reactid="14"></path></svg>
-    <div v-if="isAuthed">
+    <div v-if="haveToken">
       <User v-bind:user="dbxData.user"/>
       <Files v-bind:files="dbxData.directories"/>
     </div>
@@ -44,7 +44,7 @@ export default {
   },
   data: function() {
     return {
-      isAuthed: false,
+      haveToken: false,
       isLoaded: false,
       dbxData: {}
     };
@@ -59,7 +59,7 @@ export default {
       var params = getUrlParams('access_token');
       var token = params['http://localhost:8080/#access_token'];
       if (token !== undefined) {
-        this.isAuthed = true;
+        this.haveToken = true;
         this.getData(token);
       }
     },
