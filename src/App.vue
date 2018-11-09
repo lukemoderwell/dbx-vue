@@ -1,16 +1,16 @@
 <template>
   <div id="app">
-    <DBX />
+    <Signin />
   </div>
 </template>
 
 <script>
-import DBX from './components/DBX.vue';
+import Signin from './components/Signin.vue';
 
 export default {
   name: 'app',
   components: {
-    DBX
+    Signin
   }
 }
 </script>
