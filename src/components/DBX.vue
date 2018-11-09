@@ -2,16 +2,7 @@
   <div>
     <svg class="maestro-nav__logo" aria-label="Home" xmlns="http://www.w3.org/2000/svg" role="img" width="32px" height="32px" viewBox="0 0 32 32" style="fill:#0062ff;" data-reactid="12"><title data-reactid="13"></title><path d="M8 2.4l8 5.1-8 5.1-8-5.1 8-5.1zm16 0l8 5.1-8 5.1-8-5.1 8-5.1zM0 17.7l8-5.1 8 5.1-8 5.1-8-5.1zm24-5.1l8 5.1-8 5.1-8-5.1 8-5.1zM8 24.5l8-5.1 8 5.1-8 5.1-8-5.1z" data-reactid="14"></path></svg>
     <div v-if="isAuthed">
-      You are authenticated
-      <!-- <div>
       <p>Hello, {{dbxData.user.name.given_name}}</p>
-        <p>Hello, {{dbxData.user.name.given_name}}</p>
-        <div class="directories">
-          <div v-for="(item, index) in dbxData.directories" :key="`item-${index}`">
-            <div class="directory">{{ item.name }}</div>
-          </div>
-        </div>
-      </div> -->
     </div>
     <div v-else>
       <a href="#" id="authlink" style="background: #1268FB">Sign in with Dropbox</a>
@@ -24,7 +15,7 @@ import { Dropbox } from "dropbox";
 
 // get data from Dropbox and add to Vue
 var ACCESS_TOKEN = process.env.VUE_APP_DB_ACCESS_TOKEN;
-var CLIENT_ID = process.env.VUE_APP_DB_CLIENT_ID;
+var CLIENT_ID = process.env.VUE_APP_DB_KEY;
 var dbx = new Dropbox({ accessToken: ACCESS_TOKEN, clientId: CLIENT_ID, fetch: fetch });
 
 function getUrlParams( prop ) {
@@ -32,7 +23,7 @@ function getUrlParams( prop ) {
     var search = decodeURIComponent( window.location.href.slice( window.location.href.indexOf( '?' ) + 1 ) );
     var definitions = search.split( '&' );
 
-    definitions.forEach( function( val, key ) {
+    definitions.forEach( function( val ) {
         var parts = val.split( '=', 2 );
         params[ parts[ 0 ] ] = parts[ 1 ];
     } );
@@ -44,7 +35,6 @@ export default {
   name: "DBX",
   mounted() {
     this.setupAuth();
-    
   },
   data: function() {
     return {
@@ -64,19 +54,21 @@ export default {
       var token = params['http://localhost:8080/#access_token'];
       if (token !== undefined) {
         this.isAuthed = true;
-        this.getData();
+        this.getData(token);
       }
     },
-    getData() {
+    getData(token) {
       this.isLoading = true;
+      var dbx = new Dropbox({ accessToken: token, fetch: fetch });
+      console.log(dbx);
       dbx.usersGetCurrentAccount().then(response => {
-          this.dbx.user = response;
-        }).catch(err => (this.isLoading = false));
+        this.dbxData.user = response;
+      });
       // list out all folders
       dbx.filesListFolder({ path: "" }).then(response => {
-          this.dbx.directories = response.entries;
-          this.isLoading = false;
-        }).catch(err => (this.isLoading = false));
+        this.dbxData.directories = response.entries;
+        this.isLoading = false;
+      });
     }
   }
 };
