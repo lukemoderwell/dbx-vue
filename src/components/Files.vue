@@ -1,6 +1,6 @@
 <template>
   <div class="files" v-if="isLoaded">
-    <div class="file" v-for="(item, index) in files" :key="index">{{ item.name }}</div>
+    <div class="file" v-for="(item, index) in files" :key="index">{{ item }}</div>
   </div>
   <div v-else>
     <p>Loading files...</p>
@@ -9,10 +9,12 @@
 
 <script>
 import { Dropbox } from "dropbox";
+var dbx;
 export default {
   name: "Files",
   props: {
-    token: String
+    token: String,
+    path: String
   },
   data: function() {
     return {
@@ -21,12 +23,12 @@ export default {
     }
   },
   mounted() {
-    this.getFiles(this.token);
+    dbx = new Dropbox({ accessToken: this.token, fetch: fetch });
+    this.getFiles();
   },
   methods: {
-    getFiles(token) {
-      var dbx = new Dropbox({ accessToken: token, fetch: fetch });
-      dbx.filesListFolder({ path: "" }).then(response => {
+    getFiles() {
+      dbx.filesListFolder({ path: this.path }).then(response => {
         this.files = response.entries;
         this.isLoaded = true;
       });
